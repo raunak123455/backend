@@ -1,31 +1,24 @@
 import { Request, Response } from "express";
 import Product from "../models/product.model";
 
+
 export const getLatestProduct = async (req: Request, res: Response) => {
   try {
-    const product = await Product.findOne().sort({ createdAt: -1 });
+    const quantity = Math.floor(Math.random() * 10) + 1; // Random number between 1-10
+    const price = Math.floor(Math.random() * 50) + 10; // Random number between 10-60
+    const profit = Math.floor(Math.random() * 30) + 5; // Random number between 5-35
 
-    if (!product) {
-      // Return these exact default values if no product exists
-      return res.status(200).json({
-        quantity: 2,
-        price: 25,
-        total: 40,
-        profit: 11,
-      });
-    }
-
-    // Return only the needed fields
     res.status(200).json({
-      quantity: product.quantity,
-      price: product.price,
-      total: product.total,
-      profit: product.profit,
+      quantity,
+      price,
+      profit,
+      total: quantity * price * profit,
     });
   } catch (error) {
     res.status(500).json({ message: "Error fetching product data", error });
   }
 };
+  
 
 export const createProduct = async (req: Request, res: Response) => {
   try {

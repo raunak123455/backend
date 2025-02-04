@@ -1,0 +1,54 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import productRoutes from "./routes/product.routes";
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000", // Local frontend
+      "https://your-frontend-domain.com", // Add your deployed frontend URL
+    ],
+    credentials: true,
+  })
+);
+app.use(express.json());
+
+// Landing route
+app.get("/", (req, res) => {
+  res.json({
+    message: "Server is running",
+    status: "active",
+    time: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
+
+// Routes
+app.use("/api/products", productRoutes);
+
+// MongoDB connection with more detailed error handling
+mongoose.set("strictQuery", false); // Add this line for Mongoose 7+
+
+mongoose
+  .connect(process.env.MONGODB_URI!)
+  .then(() => {
+    console.log("Connected to MongoDB Atlas");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error details:");
+    console.error("Error name:", err.name);
+    console.error("Error message:", err.message);
+    console.error("Full error:", err);
+    process.exit(1);
+  });

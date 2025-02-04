@@ -12,7 +12,7 @@ export const getLatestProduct = async (req: Request, res: Response) => {
       quantity,
       price,
       profit,
-      total: quantity * price * profit,
+      total: quantity * price ,
     });
   } catch (error) {
     res.status(500).json({ message: "Error fetching product data", error });

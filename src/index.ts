@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000", // Local frontend
-      "https://form-data-last.vercel.app", // Add your deployed frontend URL
+      "https://raunak-assignment.vercel.app", // Add your deployed frontend URL
     ],
     credentials: true,
   })
